@@ -10,7 +10,7 @@ namespace DBDocumentEditor.Domain.Abstract
     public interface IDBDocRepository
     {
         List<DBDocument> Documents { get; }
-        bool UpdateTableDescription(string description);
-        bool UpdateFieldDescription(string fieldName, string value);
+        //bool UpdateTableDescription(string description);
+        bool UpdateDescription(string fieldName, string value);
     }
 }

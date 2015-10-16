@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtTableName = new System.Windows.Forms.TextBox();
             this.btnSearch = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.TableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -47,12 +47,13 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "表名：";
             // 
-            // textBox1
+            // txtTableName
             // 
-            this.textBox1.Location = new System.Drawing.Point(54, 20);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 21);
-            this.textBox1.TabIndex = 1;
+            this.txtTableName.Location = new System.Drawing.Point(54, 20);
+            this.txtTableName.Name = "txtTableName";
+            this.txtTableName.Size = new System.Drawing.Size(100, 21);
+            this.txtTableName.TabIndex = 1;
+            this.txtTableName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtTableName_KeyPress);
             // 
             // btnSearch
             // 
@@ -66,31 +67,50 @@
             // 
             // dataGridView1
             // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.TableName,
             this.FieldName,
             this.Description});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 58);
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnF2;
+            this.dataGridView1.Location = new System.Drawing.Point(0, 70);
+            this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.Size = new System.Drawing.Size(574, 265);
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.dataGridView1.Size = new System.Drawing.Size(598, 265);
             this.dataGridView1.TabIndex = 4;
+            this.dataGridView1.Visible = false;
+            this.dataGridView1.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellEndEdit);
             // 
             // TableName
             // 
+            this.TableName.DataPropertyName = "TableName";
             this.TableName.HeaderText = "表名";
             this.TableName.Name = "TableName";
+            this.TableName.ReadOnly = true;
+            this.TableName.Width = 54;
             // 
             // FieldName
             // 
+            this.FieldName.DataPropertyName = "FieldName";
             this.FieldName.HeaderText = "字段名";
             this.FieldName.Name = "FieldName";
+            this.FieldName.ReadOnly = true;
+            this.FieldName.Width = 66;
             // 
             // Description
             // 
+            this.Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.Description.DataPropertyName = "Description";
             this.Description.HeaderText = "字段说明";
             this.Description.Name = "Description";
+            this.Description.Width = 78;
             // 
             // frmSearch
             // 
@@ -99,9 +119,12 @@
             this.ClientSize = new System.Drawing.Size(598, 335);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.btnSearch);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtTableName);
             this.Controls.Add(this.label1);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "frmSearch";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "数据字典编辑";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
@@ -112,7 +135,7 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtTableName;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewTextBoxColumn TableName;

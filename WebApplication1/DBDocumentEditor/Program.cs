@@ -17,7 +17,7 @@ namespace DBFieldEditor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmSearch(DocumentFactory.CreateRepository("CityGroup")));
+            Application.Run(new frmSearch());
         }
     }
 }
