@@ -71,6 +71,7 @@
       <DependentUpon>DBDocumentModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Abstract\IDBDocRepository.cs" />
+    <Compile Include="Entities\DBTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DocumentFactory.cs" />
   </ItemGroup>

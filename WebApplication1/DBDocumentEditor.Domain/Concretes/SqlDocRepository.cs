@@ -13,6 +13,7 @@ namespace DBDocumentEditor.Domain.Concretes
     {
         readonly string _tableName;
         List<DBDocument> _dbDocList = null;
+        List<DBTable> _dbTableList = null;
 
         internal SqlDocRepository(string tableName)
         {
@@ -85,15 +86,22 @@ namespace DBDocumentEditor.Domain.Concretes
         {
             using (var context = new EFDocumentContext())
             {
-                string sql = @"declare @CurrentUser sysname
-                               select @CurrentUser = user_name()
-                               -- 删除说明
-                               execute sp_dropextendedproperty 'MS_Description', 
-                                        'user', @CurrentUser, 'table', @TableName
-                               -- 添加说明
-                               execute sp_addextendedproperty 'MS_Description', 
-                                       @Description,
-                                       'user', @CurrentUser, 'table', @TableName";
+                string sql = @" DECLARE @CurrentUser SYSNAME
+                                SELECT  @CurrentUser = USER_NAME()
+                               
+                                IF EXISTS ( SELECT  1
+                                            FROM    sys.extended_properties p
+                                            WHERE   p.major_id = OBJECT_ID(@TableName)
+                                                    AND p.minor_id = 0 ) 
+                                BEGIN
+	                                -- 删除说明
+                                    EXECUTE sp_dropextendedproperty 'MS_Description', 'user', @CurrentUser,
+                                        'table', @TableName
+                                END
+
+                                -- 添加说明
+                                EXECUTE sp_addextendedproperty 'MS_Description', @Description, 'user',
+                                    @CurrentUser, 'table', @TableName";
 
                 return context.Database.ExecuteSqlCommand(sql,
                         new SqlParameter
@@ -106,7 +114,7 @@ namespace DBDocumentEditor.Domain.Concretes
                         {
                             ParameterName = "@Description",
                             DbType = System.Data.DbType.String,
-                            Value = doc.Description
+                            Value = doc.Description ?? string.Empty
                         }) > 0;
             }
         }
@@ -120,15 +128,26 @@ namespace DBDocumentEditor.Domain.Concretes
         {
             using (var context = new EFDocumentContext())
             {
-                string sql = @"declare @CurrentUser sysname
-                               select @CurrentUser = user_name()
-                               -- 删除说明
-                               execute sp_dropextendedproperty 'MS_Description', 
-                                        'user', @CurrentUser, 'table', @TableName, 'column', @FiledName
-                               -- 添加说明
-                               execute sp_addextendedproperty 'MS_Description', 
-                                       @Description,
-                                       'user', @CurrentUser, 'table', @TableName, 'column', @FiledName";
+                string sql = @" DECLARE @CurrentUser SYSNAME
+                                SELECT  @CurrentUser = USER_NAME()
+                               
+                                IF EXISTS ( SELECT  1
+                                            FROM    sys.extended_properties p
+                                            WHERE   p.major_id = OBJECT_ID(@TableName)
+                                                    AND p.minor_id = ( SELECT   c.column_id
+                                                                       FROM     sys.columns c
+                                                                       WHERE    c.object_id = p.major_id
+                                                                                AND c.name = @FiledName
+                                                                     ) )  
+                                BEGIN
+	                                -- 删除说明
+                                    EXECUTE sp_dropextendedproperty 'MS_Description', 'user', @CurrentUser,
+                                        'table', @TableName, 'column', @FiledName
+                                END
+
+                                -- 添加说明
+                                EXECUTE sp_addextendedproperty 'MS_Description', @Description, 'user',
+                                    @CurrentUser, 'table', @TableName, 'column', @FiledName";
 
                 return context.Database.ExecuteSqlCommand(sql,
                         new SqlParameter
@@ -147,7 +166,7 @@ namespace DBDocumentEditor.Domain.Concretes
                         {
                             ParameterName = "@Description",
                             DbType = System.Data.DbType.String,
-                            Value = doc.Description
+                            Value = doc.Description ?? string.Empty
                         }) > 0;
             }
         }
@@ -182,6 +201,29 @@ namespace DBDocumentEditor.Domain.Concretes
                 }
 
                 return _dbDocList;
+            }
+        }
+
+        public List<DBTable> Tables
+        {
+            get
+            {
+                if (_dbTableList == null)
+                {
+                    _dbTableList = GetDBTables();
+                }
+                return _dbTableList;
+            }
+        }
+
+        private List<DBTable> GetDBTables()
+        {
+            using (var context = new EFDocumentContext())
+            {
+                string sql = @" SELECT Name,object_id AS ObjectID FROM sys.tables WHERE type = 'U'
+	                            ORDER BY name ";
+
+                return context.Database.SqlQuery<DBTable>(sql).ToList();  
             }
         }
     }

@@ -14,5 +14,6 @@ namespace DBDocumentEditor.Domain
         {
             return new SqlDocRepository(tableName);
         }
+
     }
 }

@@ -16,8 +16,18 @@ namespace DBFieldEditor
     {
         IDBDocRepository _documentRepo;
         public frmSearch()
-        {
+        {            
             InitializeComponent();
+            LoadTableList();
+        }
+
+        private void LoadTableList()
+        {
+            lbTableList.DisplayMember = "Name";
+            lbTableList.ValueMember = "Name";
+            lbTableList.DataSource = DocumentFactory.CreateRepository(string.Empty).Tables;
+
+            lbTableList.SelectedItem = null;
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -26,7 +36,8 @@ namespace DBFieldEditor
             dataGridView1.Visible = false;
             if (string.IsNullOrEmpty(tableName))
             {
-                MessageBox.Show("请输入表名！");
+                dataGridView1.DataSource = null;
+                //MessageBox.Show("请输入表名！");
                 return;
             }
             
@@ -56,10 +67,21 @@ namespace DBFieldEditor
             //dataGridView1.CurrentRow.Cells["Description"].Value.ToString());
 
             _documentRepo.UpdateDescription(dataGridView1.CurrentRow.Cells["FieldName"].Value.ToString(),
-                dataGridView1.CurrentRow.Cells["Description"].Value.ToString());
+                string.Format("{0}",dataGridView1.CurrentRow.Cells["Description"].Value));
             //_documentRepo.u
             //MessageBox.Show(msg);
         }
-        
+
+        private void lbTableList_Click(object sender, EventArgs e)
+        {
+            txtTableName.Text = string.Format("{0}", lbTableList.SelectedValue);
+            
+            btnSearch_Click(sender, e);
+        }
+
+        private void lbTableList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            lbTableList_Click(sender, e);
+        }        
     }
 }

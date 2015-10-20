@@ -12,5 +12,6 @@ namespace DBDocumentEditor.Domain.Abstract
         List<DBDocument> Documents { get; }
         //bool UpdateTableDescription(string description);
         bool UpdateDescription(string fieldName, string value);
+        List<DBTable> Tables { get; }
     }
 }
