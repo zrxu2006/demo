@@ -1,0 +1,61 @@
+﻿body {
+    margin: 0;padding: 0;
+    background-color: #C5C8CD;
+    font-family: '微软雅黑';
+}
+
+.header {
+    background-color: #000000;
+    color: azure;
+    font-weight: bold;
+    padding: 25px;
+}
+
+.helpBody {
+    padding: 20px 80px;
+    width: 80%;
+}
+
+article {
+    padding: 10px;
+    margin-bottom: 40px;
+    background-color: #FFF;
+    border-radius: 5px;
+}
+
+.demo {
+    min-height: 100px;
+}
+
+.code {
+    background-color:#f0fff0;
+}
+
+.code pre {
+    white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+.code-table {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.code-table td {
+    border: 1px solid #808080;
+}
+
+
+#cate {
+    position: fixed;
+    top: 90px;
+    right: 10px;
+    border: 1px solid #000;
+    background-color: white;
+    width: 145px;
+}
